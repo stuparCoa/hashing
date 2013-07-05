@@ -1,9 +1,14 @@
 package hashing.core;
 
-public interface Resolver<K, V> {
+public abstract class Resolver<K, V> {
 
-	public boolean resolve(K[] keys, V[] values, K key, V value);
+	protected K[] keys;
+	protected V[] values;
+		
+	protected HashFunction defaultHashFunction;
 	
-	public int resolveLookup(K[] keys, V[] values, K key);
+	public abstract boolean resolve(K key, V value);
+	
+	public abstract int resolveLookup(K key);
 	
 }

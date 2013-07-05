@@ -7,7 +7,9 @@ public class DefaultSHashMap<K, V> implements SHashMap<K, V> {
 	protected K[] keys;
 	protected V[] values;
 	
-	//protected ... collisionResolver; 
+	protected Resolver<K, V> collisionResolver;
+	protected HashFunction defaultHashFunction;
+	protected HashSerializer<K> serializer;
 	
 	public DefaultSHashMap(){
 		
@@ -19,7 +21,7 @@ public class DefaultSHashMap<K, V> implements SHashMap<K, V> {
 	
 	@Override
 	public boolean contains(K key) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
@@ -49,8 +51,13 @@ public class DefaultSHashMap<K, V> implements SHashMap<K, V> {
 
 	@Override
 	public boolean put(K key, V value) {
-		// TODO Auto-generated method stub
-		return false;
+		int index = defaultHashFunction.hash32(serializer.serialize(key));
+		if(keys[index]!=null){
+			return collisionResolver.resolve(key, value);			
+		}
+		keys[index]=key;
+		values[index]=value;
+		return true;
 	}
 
 	@Override
